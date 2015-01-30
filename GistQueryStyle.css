@@ -1,0 +1,8 @@
+
+input[type='button']{display:block;}
+
+label{display:inline-block;margin-bottom:10px;}
+
+input[type='checkbox']{display:inline-block}
+
+.dd select{display:block;}
