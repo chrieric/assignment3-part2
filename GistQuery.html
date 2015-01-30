@@ -2,10 +2,11 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="GistQueryStyle.css">
+	<script src='GistQueryFunctions.js'></script>
 	<title>Gist Searcher</title>
 </head>
 <body>
-	<form class='searchb'>
+	<form class='searchb' action="" method="GET">
 		<label>Python</label>
 		<input type='checkbox' name='Python' value='Python'>
 		
@@ -18,7 +19,7 @@
 		<label>SQL</label>
 		<input type='checkbox' name = 'SQL' value='SQL'>
 		
-		<input type='button' name='search' onclick='searchGists()' value='Search Gists'>
+		<input type='button' name='QueryGist' onclick='requestData()' value='Search'>
 	</form>
 	
 	<form class='dd'>
@@ -30,5 +31,9 @@
 		<option value='4'>4</option>
 		<option value='5'>5</option>
 	</form>
+	
+	<ul id = 'gist_display'>
+	</ul>
+	
 </body>
 </html>

@@ -1,33 +1,63 @@
 
-function requestData(url,gist_Data)
+function requestData()
 {
-	//intentionally blank at this time
+	var request;
+	
+	request = new XMLHttpRequest;
+	
+	if(!request)
+	{
+		alert('Unable to create http request');
+	}
+	
+	var url = 'https://api.github.com/gists/public';
+	
+	request.onreadystatechange = function()
+	{
+		if(request.readyState === 4)
+		{
+			if(request.status === 200)
+			{
+				console.log("Request successful");
+				var response = JSON.parse('"url"','"description"');
+				createGistTable(response);
+			}
+		}
+	};
+	
+	request.open('GET',url);
+	request.send();
 }
 
+	
 
 
 //Function to produce array of queries upon request
 function createGistTable(qArray)
 {
-	var list = document.createElement('tr');
+	var row = document.createElement('ul');
 	
 	for(var i = 0; i < qArray.length;i++)
 	{
-		var entry = document.createElement('td');
+		var entry = document.createElement('il');
 		
-		if(array[i].description.length === 0)
+		if(qArray[i].description !== null)
 		{
-			intem.innerHTML = '<a href=""+qArray[i].url + "> + "No Description" + '</a>';
+			if(qArray[i].description.length === 0)
+			{
+				entry.innerHTML = '<a href=""+qArray[i].url + ">' + "No Description" + '</a>';
+			}
+
 		}
 		else
 		{
-			item.innerHTML = '<a href=""+ qArray[i].url+"">' + array[i].description+'</a>';
+			entry.innerHTML = '<a href=""+ qArray[i].url+"">' + qArray[i].description+'</a>';
 		}
 		
-		list.appendChild(entry);
+		row.appendChild(entry);
 	}
 	
-	return list;
+	return row;
 }
 
 
