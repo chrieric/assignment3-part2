@@ -19,8 +19,8 @@ function requestData()
 			if(request.status === 200)
 			{
 				console.log("Request successful");
-				var response = JSON.parse('"url"','"description"');
-				createGistTable(response);
+				var response = JSON.parse(this.responseText);
+				createGistTable(document.getElementById('display-q'),response);
 			}
 		}
 	};
@@ -33,13 +33,13 @@ function requestData()
 
 
 //Function to produce array of queries upon request
-function createGistTable(qArray)
+function createGistTable(ul,qArray)
 {
-	var row = document.createElement('ul');
-	
-	for(var i = 0; i < qArray.length;i++)
+	for(var i = ul.childNodes.length-1; i >=0;i--)
 	{
-		var entry = document.createElement('il');
+		ul.removeChild(ul.childNodes[i]);
+		
+		var entry = document.createElement('li');
 		
 		if(qArray[i].description !== null)
 		{
@@ -54,10 +54,9 @@ function createGistTable(qArray)
 			entry.innerHTML = '<a href=""+ qArray[i].url+"">' + qArray[i].description+'</a>';
 		}
 		
-		row.appendChild(entry);
+		ul.appendChild(entry);
+		console.log('made it here 2:boogaloo');
 	}
-	
-	return row;
 }
 
 
@@ -65,3 +64,20 @@ function saveToFavorites()
 {
 	//intentionally blank at this time
 }
+/**
+window.onload = function()
+{
+	var drop_down = document.getElementById('per-page');
+	var dd_value = drop_down.value;
+	
+	var num_Child = 30*dd_value;
+	console.log(num_Child);
+	
+	for(var i = num_Child;i>=0;i--)
+	{
+		li = document.createElement('li');
+		li.innerHTML='Just print stuff';
+		document.getElementById('display-q').appendChild(li);
+	}
+}
+**/
