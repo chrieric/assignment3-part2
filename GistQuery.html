@@ -2,7 +2,33 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="GistQueryStyle.css">
+	<title>Gist Searcher</title>
 </head>
 <body>
+	<form class='searchb'>
+		<label>Python</label>
+		<input type='checkbox' name='Python' value='Python'>
+		
+		<label>JSON</label>
+		<input type='checkbox' name = 'JSON' value='JSON'>
+		
+		<label>Javascript</label>
+		<input type='checkbox' name = 'Javascript' value='Javascript'>
+
+		<label>SQL</label>
+		<input type='checkbox' name = 'SQL' value='SQL'>
+		
+		<input type='button' name='search' onclick='searchGists()' value='Search Gists'>
+	</form>
+	
+	<form class='dd'>
+		<label>Pages to Display</label>
+		<select name='numpages'>
+		<option value='1'>1</option>
+		<option value='2'>2</option>
+		<option value='3'>3</option>
+		<option value='4'>4</option>
+		<option value='5'>5</option>
+	</form>
 </body>
 </html>
