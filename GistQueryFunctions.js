@@ -1,19 +1,19 @@
 
-
+//var object_Array = [];
 
 function requestData()
 {
 	var request;
 	var init_url = "http://api.github.com/gists/public";
-	var pages = 4;
+	var pages =	3;
+	var response_array = new Array();
+	var page_size = 90;
+	//var page_num = document.getElementById('per-page');
+	//var page_num_value = page_num.value;
 	
-	var page_size = 30;
-	var page_num = document.getElementById('per-page');
-	var page_num_value = page_num.value;
+	//var to_display = page_size*page_num_value;
 	
-	var to_display = page_size*page_num_value;
-	
-	console.log(to_display);
+	//console.log(to_display);
 	
 	for(var i = 1;i <=pages;i++)
 	{
@@ -24,7 +24,7 @@ function requestData()
 			alert('Unable to create http request');
 		}
 	
-		var url = init_url+"?page="+i+"&per_page="+to_display;
+		var url = init_url+"?page="+i+"&per_page="+page_size;
 	
 		request.open('GET',url);
 		request.send();
@@ -36,19 +36,36 @@ function requestData()
 				if(request.status === 200)
 				{
 					var response = JSON.parse(this.responseText);
-					createGistTable(document.getElementById('display-q'),response);
+					response_array.push(arrayBuilder(response));
+					console.log(response_array.length);
 				}
 			}
-		};
+		}
 	}
+	createGistTable(document.getElementById('display-q'),response_array);
 };
+
+function arrayBuilder(ob_Array)
+{
+	var object_Array = [];
+	for(var i = 0;i < ob_Array.length;i++)
+	{
+		object_Array.push(ob_Array[i]);
+		console.log('Building Array');
+	}
+	
+	return object_Array;
+}
 
 
 //Function to produce array of queries upon request
 function createGistTable(ul,qArray)
 {	
 	_resetTable(ul);
-	for(var i = 0; i < qArray.length ;i++)
+	
+	console.log("Here I am");
+	
+	for(var j = 0; j < qArray.length ;j++)
 	{
 		var entry = document.createElement('li');
 		
@@ -64,11 +81,12 @@ function createGistTable(ul,qArray)
 		}
 		else
 		{
-			entry.innerHTML = '<a href=""+ qArray[i].url+"">' + qArray[i].description+'</a>';
+			entry.innerHTML = '<a href=""+ qArray[i].url+"">' + qArray[j].description+'</a>';
 		}
 		
 		ul.appendChild(entry);
 	}
+	
 };
 
 
