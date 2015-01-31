@@ -38,25 +38,95 @@ function requestData()
 
 function arrayBuilder(ob_Array)
 {
+	var temp= [];
 	for(var i = 0;i < ob_Array.length;i++)
 	{
 		object_Array.push(ob_Array[i]);
 		//console.log(object_Array[i]);
 	}
 	
-	createGistTable(document.getElementById('display-q'),object_Array);
+	temp = byLanguage(object_Array);
+	
+	createGistTable(document.getElementById('display-q'),temp);
 }
 
+
+
+function byLanguage(ob_Array)
+{
+	var temp = [];
+	
+	var pyth = document.getElementById('Python');
+	var jso = document.getElementById('JSON');
+	var js = document.getElementById('Javascript');
+	var sequel = document.getElementById('SQL');
+	
+	var pyth_Select = pyth.value;
+	var jso_Select = jso.value;
+	var js_Select= js.value;
+	var sequel_Select = sequel.value;
+	
+	var lang_holder;
+	
+	for (var i = 0; i < ob_Array.length;i++)
+	{
+		var nested_Obj = ob_Array[i].files;
+		for(key in nested_Obj)
+		{
+			var nested_Obj_2 = nested_Obj[key];
+			
+			for(key_2 in nested_Obj_2)
+			{
+				if(nested_Obj_2.hasOwnProperty('language'))
+				{
+					lang_holder = nested_Obj_2.language;
+				}			
+			}
+
+		}
+		
+		if(pyth_Select != 'Python' && jso_Select != 'JSON' && js_Select != 'Javascript' && sequel_Select != 'SQL')
+		{
+			
+			temp.push(ob_Array[i]);
+			
+		}
+		else
+		{
+			if(lang_holder == pyth_Select)
+			{
+				temp.push(ob_Array[i]);
+			}
+						
+			if(lang_holder == jso_Select)
+			{
+				temp.push(ob_Array[i]);
+			}
+						
+			if(lang_holder == js_Select)
+			{
+				temp.push(ob_Array[i]);
+			}
+						
+			if(lang_holder == sequel_Select)
+			{
+				temp.push(ob_Array[i]);
+			}
+		}
+	}
+
+	return temp;
+	
+};
 
 //Function to produce array of queries upon request
 function createGistTable(ul,qArray)
 {	
+	_resetTable(ul);
 	var page_num = document.getElementById('per-page');
 	var page_num_value = page_num.value;
 	var page_size = 30;
 	var to_display = page_size*page_num_value;
-	
-	_resetTable(ul);
 	
 	for(var j = 0; j < to_display ;j++)
 	{
