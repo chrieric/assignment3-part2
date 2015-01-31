@@ -1,20 +1,13 @@
 
-//var object_Array = [];
+var object_Array = [];
 
 function requestData()
 {
 	var request;
 	var init_url = "http://api.github.com/gists/public";
 	var pages =	3;
-	var response_array = new Array();
 	var page_size = 90;
-	//var page_num = document.getElementById('per-page');
-	//var page_num_value = page_num.value;
-	
-	//var to_display = page_size*page_num_value;
-	
-	//console.log(to_display);
-	
+
 	for(var i = 1;i <=pages;i++)
 	{
 		request = new XMLHttpRequest;
@@ -36,57 +29,56 @@ function requestData()
 				if(request.status === 200)
 				{
 					var response = JSON.parse(this.responseText);
-					response_array.push(arrayBuilder(response));
-					console.log(response_array.length);
+					arrayBuilder(response);
 				}
 			}
-		}
+		};	
 	}
-	createGistTable(document.getElementById('display-q'),response_array);
 };
 
 function arrayBuilder(ob_Array)
 {
-	var object_Array = [];
 	for(var i = 0;i < ob_Array.length;i++)
 	{
 		object_Array.push(ob_Array[i]);
-		console.log('Building Array');
+		//console.log(object_Array[i]);
 	}
 	
-	return object_Array;
+	createGistTable(document.getElementById('display-q'),object_Array);
 }
 
 
 //Function to produce array of queries upon request
 function createGistTable(ul,qArray)
 {	
+	var page_num = document.getElementById('per-page');
+	var page_num_value = page_num.value;
+	var page_size = 30;
+	var to_display = page_size*page_num_value;
+	
 	_resetTable(ul);
 	
-	console.log("Here I am");
-	
-	for(var j = 0; j < qArray.length ;j++)
+	for(var j = 0; j < to_display ;j++)
 	{
 		var entry = document.createElement('li');
 		
 
-		if(qArray[i].hasOwnProperty.call(qArray[i],'description') ===  false)
+		if(qArray[j].hasOwnProperty.call(qArray[j],'description') ===  false)
 		{
-			entry.innerHTML = '<a href=""+qArray[i].url + ">' + "Description does not exist" + '</a>';
+			entry.innerHTML = '<a href=""+qArray[j].url + ">' + "Description does not exist" + '</a>';
 
 		}
-		else if(qArray[i].description === "" )
+		else if(qArray[j].description === "" )
 		{
-			entry.innerHTML = '<a href=""+qArray[i].url + ">'+"Description empty"+'</a>';
+			entry.innerHTML = '<a href=""+qArray[j].url + ">'+"Description empty"+'</a>';
 		}
 		else
 		{
-			entry.innerHTML = '<a href=""+ qArray[i].url+"">' + qArray[j].description+'</a>';
+			entry.innerHTML = '<a href=""+ qArray[j].url+"">' + qArray[j].description+'</a>';
 		}
 		
 		ul.appendChild(entry);
 	}
-	
 };
 
 
