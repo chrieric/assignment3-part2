@@ -5,7 +5,16 @@ function requestData()
 {
 	var request;
 	var init_url = "http://api.github.com/gists/public";
-	var pages = 6;
+	var pages = 4;
+	
+	var page_size = 30;
+	var page_num = document.getElementById('per-page');
+	var page_num_value = page_num.value;
+	
+	var to_display = page_size*page_num_value;
+	
+	console.log(to_display);
+	
 	for(var i = 1;i <=pages;i++)
 	{
 		request = new XMLHttpRequest;
@@ -15,7 +24,7 @@ function requestData()
 			alert('Unable to create http request');
 		}
 	
-		var url = init_url+"?page="+i+"&per_page=30";
+		var url = init_url+"?page="+i+"&per_page="+to_display;
 	
 		request.open('GET',url);
 		request.send();
@@ -37,9 +46,9 @@ function requestData()
 
 //Function to produce array of queries upon request
 function createGistTable(ul,qArray)
-{
-	
-	for(var i = 0; i < qArray.length;i++)
+{	
+	_resetTable(ul);
+	for(var i = 0; i < qArray.length ;i++)
 	{
 		var entry = document.createElement('li');
 		
@@ -68,19 +77,11 @@ function saveToFavorites()
 	//intentionally blank at this time
 }
 
-/**
-window.onload = function()
+function _resetTable(ul)
 {
-	var drop_down = document.getElementById('per-page');
-	var dd_value = drop_down.value;
-	
-	var num_Child = 30*dd_value;
-	
-	for(var i = num_Child;i>=0;i--)
+	for(var i = ul.childNodes.length-1; i>=0; i--)
 	{
-		li = document.createElement('li');
-		li.innerHTML = null;
-		document.getElementById('display-q').appendChild(li);
+		ul.removeChild(ul.childNodes[i]);
 	}
 };
-**/
+
