@@ -71,6 +71,7 @@ function byLanguage(ob_Array)
 	for (var i = 0; i < ob_Array.length;i++)
 	{
 		var nested_Obj = ob_Array[i].files;
+		
 		for(key in nested_Obj)
 		{
 			var nested_Obj_2 = nested_Obj[key];
@@ -114,7 +115,7 @@ function byLanguage(ob_Array)
 			}
 		}
 	}
-
+	console.log(temp[i]);
 	return temp;
 	
 };
@@ -128,6 +129,11 @@ function createGistTable(ul,qArray)
 	var page_size = 30;
 	var to_display = page_size*page_num_value;
 	
+	if(qArray.length < to_display)
+	{
+		to_display = qArray.length;
+	}
+	
 	for(var j = 0; j < to_display ;j++)
 	{
 		var entry = document.createElement('li');
@@ -135,16 +141,16 @@ function createGistTable(ul,qArray)
 
 		if(qArray[j].hasOwnProperty.call(qArray[j],'description') ===  false)
 		{
-			entry.innerHTML = '<a href=""+qArray[j].url + ">' + "Description does not exist" + '</a>';
+			entry.innerHTML = '<a href='+qArray[j].url + '>' + "Description does not exist" + '</a>';
 
 		}
 		else if(qArray[j].description === "" )
 		{
-			entry.innerHTML = '<a href=""+qArray[j].url + ">'+"Description empty"+'</a>';
+			entry.innerHTML = '<a href='+qArray[j].url + '>'+"Description empty"+'</a>';
 		}
 		else
 		{
-			entry.innerHTML = '<a href=""+ qArray[j].url+"">' + qArray[j].description+'</a>';
+			entry.innerHTML = '<a href='+qArray[j].url+'>'+qArray[j].description+'</a>';
 		}
 		
 		ul.appendChild(entry);
