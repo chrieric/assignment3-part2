@@ -3,7 +3,7 @@ function requestData()
 {
 	var request;
 	var init_url = "http://api.github.com/gists/public";
-	var pages = 30;
+	var pages = 6;
 	for(var i = 1;i <=pages;i++)
 	{
 		request = new XMLHttpRequest;
@@ -24,7 +24,6 @@ function requestData()
 			{
 				if(request.status === 200)
 				{
-					console.log("Request successful");
 					var response = JSON.parse(this.responseText);
 					createGistTable(document.getElementById('display-q'),response);
 				}
@@ -35,13 +34,12 @@ function requestData()
 	}
 };
 
-	
-
 
 //Function to produce array of queries upon request
 function createGistTable(ul,qArray)
 {
-	for(var i = 0; i < ul.childNodes.length-1;i++)
+	
+	for(var i = 0; i < qArray.length;i++)
 	{
 		ul.removeChild(ul.childNodes[i]);
 		
@@ -72,6 +70,7 @@ function saveToFavorites()
 	//intentionally blank at this time
 }
 
+
 window.onload = function()
 {
 	var drop_down = document.getElementById('per-page');
@@ -82,7 +81,7 @@ window.onload = function()
 	for(var i = num_Child;i>=0;i--)
 	{
 		li = document.createElement('li');
-		li.innerHTML='Just print stuff';
+		li.innerHTML = null;
 		document.getElementById('display-q').appendChild(li);
 	}
 };
