@@ -1,4 +1,6 @@
 
+
+
 function requestData()
 {
 	var request;
@@ -41,8 +43,6 @@ function createGistTable(ul,qArray)
 	
 	for(var i = 0; i < qArray.length;i++)
 	{
-		ul.removeChild(ul.childNodes[i]);
-		
 		var entry = document.createElement('li');
 		
 
@@ -70,7 +70,7 @@ function saveToFavorites()
 	//intentionally blank at this time
 }
 
-
+/**
 window.onload = function()
 {
 	var drop_down = document.getElementById('per-page');
@@ -85,3 +85,4 @@ window.onload = function()
 		document.getElementById('display-q').appendChild(li);
 	}
 };
+**/
