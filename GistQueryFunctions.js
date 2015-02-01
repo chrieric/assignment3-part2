@@ -5,8 +5,8 @@ function requestData()
 {
 	var request;
 	var init_url = "http://api.github.com/gists/public";
-	var pages =	5;
-	var page_size = 30;
+	var pages =	3;
+	var page_size = 90;
 	var temp_Array = [];
 
 	for(var i = 1;i <=pages;i++)
@@ -37,6 +37,8 @@ function requestData()
 	}
 	
 	temp_Array = byLanguage(object_Array);
+	object_Array = [];
+	console.log("Length of array " + object_Array.length);
 	
 	createGistTable(document.getElementById('display-q'),temp_Array);
 };
