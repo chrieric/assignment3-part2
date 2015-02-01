@@ -2,6 +2,7 @@
 var object_Array = [];
 var fav_Array = [];
 
+//requests data from server and then creates an unordered list based on the servers results
 function requestData()
 {
 	var request;
@@ -10,6 +11,7 @@ function requestData()
 	var page_size = 90;
 	var temp_Array = [];
 
+	//loops to grab appropriate number of pages
 	for(var i = 1;i <=pages;i++)
 	{
 		request = new XMLHttpRequest;
@@ -24,6 +26,7 @@ function requestData()
 		request.open('GET',url);
 		request.send();
 		
+		//verifies server response before adding values to array using arrayBuilder function
 		request.onreadystatechange = function()
 		{
 			if(request.readyState === 4)
@@ -37,14 +40,17 @@ function requestData()
 		};
 
 	}
-	console.log("Length of array " + object_Array.length);
+	//calls byLanguage to rebuild array with selected languages listed
 	temp_Array = byLanguage(object_Array);
+	
+	//clears object array
 	object_Array = [];
 	
+	//calls createGistTable to populate table on web-page
 	createGistTable(document.getElementById('display-q'),temp_Array);
 };
 
-
+//adds gist objects to an array
 function arrayBuilder(ob_Array)
 {
 	for(var i = 0;i < ob_Array.length;i++)
@@ -53,10 +59,13 @@ function arrayBuilder(ob_Array)
 	}
 };
 
+//builds and returns array from array parameter filtering out all
+//gist objects with languages that do not match those selected by user
 function byLanguage(ob_Array)
 {
 	var temp = [];
 	
+	//variables to capture checked status of checkboxes
 	var pyth_Select = document.getElementById('Python').checked;
 	var jso_Select = document.getElementById('JSON').checked;
 	var js_Select = document.getElementById('Javascript').checked;
@@ -64,10 +73,13 @@ function byLanguage(ob_Array)
 	
 	var lang_holder;
 	
-	console.log(pyth_Select+" is the status of pyth_Select");
-	console.log(jso_Select+" is the status of jso_Select");
-	console.log(js_Select+" is the status of js_Select");
-	console.log(sequel_Select+" is the status of sequel_Select");
+	//for-test
+	//console.log(pyth_Select+" is the status of pyth_Select");
+	//console.log(jso_Select+" is the status of jso_Select");
+	//console.log(js_Select+" is the status of js_Select");
+	//console.log(sequel_Select+" is the status of sequel_Select");
+	
+	//steps through array parameter and finds the language key of the gist object
 	for (var i = 0; i < ob_Array.length;i++)
 	{
 		var nested_Obj = ob_Array[i].files;
@@ -85,6 +97,9 @@ function byLanguage(ob_Array)
 			}
 		}
 		
+		//if no checkboxes are selected it simply adds all gist objects to temp array
+		//otherwise it verifies that the language of the current object matches the checkbox language
+		//and that the checkbox is checked
 		if(pyth_Select == false && jso_Select == false && js_Select == false && sequel_Select == false)
 		{
 			temp.push(ob_Array[i]);
@@ -114,31 +129,36 @@ function byLanguage(ob_Array)
 		}
 	}
 	
+	//returns array
 	return temp;
-	
 };
 
 //Function to produce array of queries upon request
 function createGistTable(ul,qArray)
 {	
+	//resets lists before building new list
 	_resetTable(ul);
 	
+	//sets length of which to iterate over
 	var page_num = document.getElementById('per-page');
 	var page_num_value = page_num.value;
 	var page_size = 30;
 	var to_display = page_size*page_num_value;
 	
+	//creates a variable to store the save_Button
 	var save_Button;
+	
 	
 	if(qArray.length < to_display)
 	{
 		to_display = qArray.length;
 	}
 	
+	//iterates over array parameter entered, creates list items and appends them to the list then adds the appropriate
+	//html text for said item, additionally creates a save button for each item and appends it to the item
 	for(var j = 0; j < to_display ;j++)
 	{
 		var entry = document.createElement('li');
-		//var entry_ID = qArray[j].id;
 		
 		if(qArray[j].hasOwnProperty.call(qArray[j],'description') ===  false)
 		{
@@ -157,12 +177,12 @@ function createGistTable(ul,qArray)
 		
 		save_Button = addButton('Save',qArray,j,qArray[j].id);
 
-		
 		entry.appendChild(save_Button);
 
 	}
 };
 
+//creates a button object to add items to local storage
 function addButton(text,array,index,id)
 {
 	var contain = document.createElement('input');
@@ -173,18 +193,23 @@ function addButton(text,array,index,id)
 	contain.name = text;
 	contain.id = id;
 	
+	//handles onclick events for this button, adding data to local storage
+	//removing the item from the parent list that was passed to it
+	//rewriting the GistTable to show the removal of the item
+	//and calling displayFavorites to update the favoite list
 	contain.onclick = function()
 	{
 		localStorage['Favorites'+id] = JSON.stringify(array[i]);
 		array.splice(i,1);
+		createGistTable(document.getElementById('display-q'),array);
 		displayFavorites(document.getElementById('display-fav'));
 	};
 	
-
-	
+	//returns button object
 	return contain;
 }
 
+//creates a button object to remove items from local storage
 function removeButton(text,id)
 {
 	var contain = document.createElement('input');
@@ -194,6 +219,8 @@ function removeButton(text,id)
 	contain.name = text;
 	contain.id = id;
 	
+	//handles onclick events for this button, deletes item from local storage
+	//calls dipslayFavorites to update favorite list after removal
 	contain.onclick = function()
 	{
 		delete window.localStorage["Favorites"+id];
@@ -203,6 +230,7 @@ function removeButton(text,id)
 	return contain;
 }
 
+//display list of favorites for the user
 function displayFavorites(list_Name)
 {
 	_resetTable(list_Name);
@@ -213,6 +241,10 @@ function displayFavorites(list_Name)
 	var remove_Button
 	var obj_id;
 	
+	//iterates over local storage and parses the strings back into gist objects
+	//creates table list item elements with links
+	//appends list items to list
+	//appends remove button to list items
 	for(var i = 0; i < localStorage.length;i++)
 	{
 		entry = document.createElement('li');
@@ -243,6 +275,7 @@ function displayFavorites(list_Name)
 	}
 }
 
+//resets table
 function _resetTable(ul)
 {
 	for(var i = ul.childNodes.length-1; i>=0; i--)
@@ -251,7 +284,7 @@ function _resetTable(ul)
 	}
 };
 
-
+//displays favorites on page load
 window.onload = function()
 {
 	displayFavorites(document.getElementById('display-fav'));
