@@ -1,5 +1,6 @@
 
 var object_Array = [];
+var fav_Array = [];
 
 function requestData()
 {
@@ -19,7 +20,7 @@ function requestData()
 		}
 	
 		var url = init_url+"?page="+i+"&per_page="+page_size;
-	
+		
 		request.open('GET',url);
 		request.send();
 		
@@ -33,7 +34,8 @@ function requestData()
 					arrayBuilder(response);
 				}
 			}
-		};	
+		};
+
 	}
 	console.log("Length of array " + object_Array.length);
 	temp_Array = byLanguage(object_Array);
@@ -132,6 +134,8 @@ function createGistTable(ul,qArray)
 	var page_size = 30;
 	var to_display = page_size*page_num_value;
 	
+	var save_Button;
+	
 	if(qArray.length < to_display)
 	{
 		to_display = qArray.length;
@@ -140,31 +144,48 @@ function createGistTable(ul,qArray)
 	for(var j = 0; j < to_display ;j++)
 	{
 		var entry = document.createElement('li');
+		var entry_ID = String(qArray[j].id);
 		
-
+		save_Button = document.createElement("input");
+		save_Button.type = "button";
+		save_Button.setAttribute("value","Save");
+		save_Button.setAttribute("name","Save");
+		save_Button.setAttribute("onclick","toFavorites()");
+		
+		save_Button.setAttribute("id","save"+entry_ID);
+		
 		if(qArray[j].hasOwnProperty.call(qArray[j],'description') ===  false)
 		{
-			entry.innerHTML = '<a href='+qArray[j].url + '>' + "Description does not exist" + '</a>';
-
+			entry.innerHTML = '<input type="button" name="remove" value="Remove" onclick="removeFavorite()" id="remove">'+ '<a href='+qArray[j].url + '>' + "Description does not exist" + '</a>';
+			//console.log(entry_ID);
+			 
 		}
 		else if(qArray[j].description === "" )
 		{
-			entry.innerHTML = '<a href='+qArray[j].url + '>'+"Description empty"+'</a>';
+			entry.innerHTML = '<input type="button" name="remove" value="Remove" onclick="removeFavorite()" id="remove">'+'<a href='+qArray[j].url + '>'+"Description empty"+'</a>' + '</a>';
+			//console.log(entry_ID);
 		}
 		else
 		{
-			entry.innerHTML = '<a href='+qArray[j].url+'>'+qArray[j].description+'</a>';
+			entry.innerHTML = '<input type="button" name="remove" value="Remove" onclick="removeFavorite()" id="remove">'+'<a href='+qArray[j].url+'>'+qArray[j].description+'</a>';
+			//console.log(entry_ID);
 		}
 		
+		//document.getElementById(entry_ID).addEventListener("click",function(){fav_Array.push(qArray[j]);});
+		console.log(entry_ID);
 		ul.appendChild(entry);
+		
+		save_Button.appendTo(entry);
 	}
 };
 
 
-function saveToFavorites()
-{
-	//intentionally blank at this time
+function toFavorites()
+{	
+	
+	localStorage.setItem('Favorites',JSON.stringify(favorite_Array));
 }
+
 
 function _resetTable(ul)
 {

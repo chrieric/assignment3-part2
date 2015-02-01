@@ -1,5 +1,5 @@
 
-input[type='button']{display:block;}
+input[type='button']{display:inline-block;margin-right:5px}
 
 label{display:inline-block;margin-bottom:10px;}
 
