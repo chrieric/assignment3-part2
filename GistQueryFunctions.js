@@ -35,10 +35,10 @@ function requestData()
 			}
 		};	
 	}
-	
+	console.log("Length of array " + object_Array.length);
 	temp_Array = byLanguage(object_Array);
 	object_Array = [];
-	console.log("Length of array " + object_Array.length);
+	
 	
 	createGistTable(document.getElementById('display-q'),temp_Array);
 };
