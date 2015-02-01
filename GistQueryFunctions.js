@@ -41,7 +41,6 @@ function requestData()
 	temp_Array = byLanguage(object_Array);
 	object_Array = [];
 	
-	
 	createGistTable(document.getElementById('display-q'),temp_Array);
 };
 
@@ -62,11 +61,6 @@ function byLanguage(ob_Array)
 	var jso_Select = document.getElementById('JSON').checked;
 	var js_Select = document.getElementById('Javascript').checked;
 	var sequel_Select = document.getElementById('SQL').checked;
-	
-	//var pyth_Select = pyth.value;
-	//var jso_Select = jso.value;
-	//var js_Select= js.value;
-	//var sequel_Select = sequel.value;
 	
 	var lang_holder;
 	
@@ -135,6 +129,7 @@ function createGistTable(ul,qArray)
 	var to_display = page_size*page_num_value;
 	
 	var save_Button;
+	var remove_Button;
 	
 	if(qArray.length < to_display)
 	{
@@ -144,46 +139,72 @@ function createGistTable(ul,qArray)
 	for(var j = 0; j < to_display ;j++)
 	{
 		var entry = document.createElement('li');
-		var entry_ID = String(qArray[j].id);
-		
-		save_Button = document.createElement("input");
-		save_Button.type = "button";
-		save_Button.setAttribute("value","Save");
-		save_Button.setAttribute("name","Save");
-		save_Button.setAttribute("onclick","toFavorites()");
-		
-		save_Button.setAttribute("id","save"+entry_ID);
+		//var entry_ID = qArray[j].id;
 		
 		if(qArray[j].hasOwnProperty.call(qArray[j],'description') ===  false)
 		{
-			entry.innerHTML = '<input type="button" name="remove" value="Remove" onclick="removeFavorite()" id="remove">'+ '<a href='+qArray[j].url + '>' + "Description does not exist" + '</a>';
-			//console.log(entry_ID);
-			 
+			entry.innerHTML = '<a href='+qArray[j].url + '>' + "Description empty" + '</a>';
 		}
 		else if(qArray[j].description === "" )
 		{
-			entry.innerHTML = '<input type="button" name="remove" value="Remove" onclick="removeFavorite()" id="remove">'+'<a href='+qArray[j].url + '>'+"Description empty"+'</a>' + '</a>';
-			//console.log(entry_ID);
+			entry.innerHTML = '<a href='+qArray[j].url + '>'+"Description empty"+'</a>' + '</a>';
 		}
 		else
 		{
-			entry.innerHTML = '<input type="button" name="remove" value="Remove" onclick="removeFavorite()" id="remove">'+'<a href='+qArray[j].url+'>'+qArray[j].description+'</a>';
-			//console.log(entry_ID);
+			entry.innerHTML = '<a href='+qArray[j].url+'>'+qArray[j].description+'</a>';
 		}
-		
-		//document.getElementById(entry_ID).addEventListener("click",function(){fav_Array.push(qArray[j]);});
-		console.log(entry_ID);
+
 		ul.appendChild(entry);
 		
-		save_Button.appendTo(entry);
+		save_Button = addButton('Save',qArray,j);
+		remove_Button = addButton('Remove',qArray,j);
+		
+		entry.appendChild(save_Button);
+		entry.appendChild(remove_Button);
+
 	}
 };
 
+function addButton(text,array,index)
+{
+	var contain = document.createElement('input');
+	var i = index;
+	
+	contain.type = 'button';
+	contain.value = text;
+	contain.name = text;
+	
+	contain.onclick = function()
+	{
+		fav_Array.push(array[i]);
+		toFavorites();
+		displayFavorites();
+	};
+	
+
+	
+	return contain;
+}
 
 function toFavorites()
 {	
+	var link_string;
 	
-	localStorage.setItem('Favorites',JSON.stringify(favorite_Array));
+	//localStorage.setItem('Favorites',JSON.stringify(fav_Array));
+	for (var i; i < fav_Array.length;i++)
+	{
+		link_string = '<a href='+fav_Array[i].url+'>'+fav_Array[i].description+'</a>';
+		localStorage.setItem('Favorites',link_string);
+		//localStorage['Favorites'+i] = JSON.stringify(fav_Array[i]);
+	}
+}
+
+function displayFavorites()
+{
+	for (var i; i < fav_Array.length;i++)
+	{
+		document.getElementById('fav-out').innerHTML = localStorage.getItem('Favorites');
+	}
 }
 
 
