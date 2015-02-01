@@ -129,7 +129,6 @@ function createGistTable(ul,qArray)
 	var to_display = page_size*page_num_value;
 	
 	var save_Button;
-	var remove_Button;
 	
 	if(qArray.length < to_display)
 	{
@@ -156,16 +155,15 @@ function createGistTable(ul,qArray)
 
 		ul.appendChild(entry);
 		
-		save_Button = addButton('Save',qArray,j);
-		remove_Button = addButton('Remove',qArray,j);
+		save_Button = addButton('Save',qArray,j,qArray[j].id);
+
 		
 		entry.appendChild(save_Button);
-		entry.appendChild(remove_Button);
 
 	}
 };
 
-function addButton(text,array,index)
+function addButton(text,array,index,id)
 {
 	var contain = document.createElement('input');
 	var i = index;
@@ -173,12 +171,13 @@ function addButton(text,array,index)
 	contain.type = 'button';
 	contain.value = text;
 	contain.name = text;
+	contain.id = id;
 	
 	contain.onclick = function()
 	{
-		fav_Array.push(array[i]);
-		toFavorites();
-		displayFavorites();
+		localStorage['Favorites'+id] = JSON.stringify(array[i]);
+		array.splice(i,1);
+		displayFavorites(document.getElementById('display-fav'));
 	};
 	
 
@@ -186,27 +185,63 @@ function addButton(text,array,index)
 	return contain;
 }
 
-function toFavorites()
-{	
-	var link_string;
-	
-	//localStorage.setItem('Favorites',JSON.stringify(fav_Array));
-	for (var i; i < fav_Array.length;i++)
-	{
-		link_string = '<a href='+fav_Array[i].url+'>'+fav_Array[i].description+'</a>';
-		localStorage.setItem('Favorites',link_string);
-		//localStorage['Favorites'+i] = JSON.stringify(fav_Array[i]);
-	}
-}
-
-function displayFavorites()
+function removeButton(text,id)
 {
-	for (var i; i < fav_Array.length;i++)
+	var contain = document.createElement('input');
+	
+	contain.type = 'button';
+	contain.value = text;
+	contain.name = text;
+	contain.id = id;
+	
+	contain.onclick = function()
 	{
-		document.getElementById('fav-out').innerHTML = localStorage.getItem('Favorites');
-	}
+		delete window.localStorage["Favorites"+id];
+		displayFavorites(document.getElementById('display-fav'));
+	};
+	
+	return contain;
 }
 
+function displayFavorites(list_Name)
+{
+	_resetTable(list_Name);
+	
+	var stor_Str;
+	var stor_Obj;
+	var entry;
+	var remove_Button
+	var obj_id;
+	
+	for(var i = 0; i < localStorage.length;i++)
+	{
+		entry = document.createElement('li');
+		
+		stor_Str = localStorage.getItem(localStorage.key(i));
+		stor_Obj = JSON.parse(stor_Str);
+		
+		if(stor_Obj.hasOwnProperty.call(stor_Obj,'description') ===  false)
+		{
+			entry.innerHTML = '<a href='+stor_Obj.url + '>' + "Description empty" + '</a>';
+		}
+		else if(stor_Obj.description === "" )
+		{
+			entry.innerHTML = '<a href='+stor_Obj.url + '>'+"Description empty"+'</a>' + '</a>';
+		}
+		else
+		{
+			entry.innerHTML = '<a href='+stor_Obj.url+'>'+stor_Obj.description+'</a>';
+		}
+		
+		list_Name.appendChild(entry);
+		
+		obj_id = stor_Obj.id;
+		
+		remove_Button = removeButton('Remove',obj_id);
+		
+		entry.appendChild(remove_Button);
+	}
+}
 
 function _resetTable(ul)
 {
@@ -216,3 +251,8 @@ function _resetTable(ul)
 	}
 };
 
+
+window.onload = function()
+{
+	displayFavorites(document.getElementById('display-fav'));
+}
