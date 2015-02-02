@@ -122,7 +122,7 @@ function byLanguage(ob_Array)
 				temp.push(ob_Array[i]);
 			}
 						
-			if((lang_holder == 'SQL' || lang_holder == 'sql') && sequel_Select == true)
+			if(lang_holder == 'SQL' && sequel_Select == true)
 			{
 				temp.push(ob_Array[i]);
 			}
